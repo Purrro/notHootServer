@@ -1,16 +1,7 @@
 const express = require("express");
 const mysql = require("mysql2");
-
 const router = express.Router();
-
-const db = mysql.createConnection({
-  user: "root",
-  host: "localhost",
-  password: "harzbatz4421",
-  database: "nothoot",
-  port: "3306",
-  insecureAuth: true,
-});
+const db = require("./db");
 
 // Create or edit answer with { body, iscorrect, question_id }
 router.post("/create", (req, res) => {

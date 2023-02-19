@@ -3,8 +3,9 @@ const app = express();
 const cors = require("cors");
 app.use(cors());
 app.use(express.json());
+const dotenv = require("dotenv").config();
 
-const router = require("./Routes/Router");
+const router = require("./routes/index");
 app.use("/", router);
 
 app.listen(3001, () => {

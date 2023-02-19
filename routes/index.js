@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 
-const gamesRouter = require("./Games/GamesRouter");
+const gamesRouter = require("./games");
 router.use("/games", gamesRouter);
 
-const questionsRouter = require("./Questions/QuestionsRouter");
+const questionsRouter = require("./questions");
 router.use("/questions", questionsRouter);
 
-const answersRouter = require("./Answers/AnswersRouter");
+const answersRouter = require("./answers");
 router.use("/answers", answersRouter);
 
 module.exports = router;
