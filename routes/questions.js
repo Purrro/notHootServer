@@ -1,7 +1,7 @@
 const express = require("express");
 const mysql = require("mysql2");
 const router = express.Router();
-const db = require("./db");
+const db = require("../db");
 
   // Get specific game questions []
   router.get("/:gameId", (req, res) => {
