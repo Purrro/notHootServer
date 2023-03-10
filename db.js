@@ -10,4 +10,6 @@ const db = mysql.createConnection({
   insecureAuth: true,
 });
 
+
+
 module.exports = db;

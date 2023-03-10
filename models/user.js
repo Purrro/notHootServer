@@ -1,23 +1,4 @@
-const mysql = require("mysql2");
 const db = require("../db");
-
-const create = (user, res) => {
-  console.log(user.email, user.password) + "here";
-  const sql = `INSERT INTO users (email, password) VALUES (?, ?)`;
-  db.query(sql, [user.email, user.password], (err, result) => {
-    if (err) res.send(err);
-    return null, result;
-  });
-};
-
-const getUserByEmail = (email, res) => {
-  const sql = `SELECT * FROM users WHERE email = ?`;
-  db.query(sql, [email], (err, result) => {
-    if (err) res.send(err);
-    console.log(result);
-    return result;
-  });
-};
 
 const validateDuplicateEntry = (email) => {
   return new Promise((resolve, reject) => {
@@ -37,32 +18,31 @@ const validateDuplicateEntry = (email) => {
   });
 };
 
-const insertNewUser = async (email, password) => {
+const insertNewUser = async (email, password, callback) => {
   try {
     const isUnique = await validateDuplicateEntry(email);
     if (!isUnique) {
-      console.log("Duplicate email found!");
-      console.log({ message: "User already exists" });
-      return;
+      callback(409, { message: "User already exists" });
+    } else {
+      const query = `INSERT INTO users (email, password) VALUES (?, ?)`;
+      db.query(query, [email, password], (error, results) => {
+        if (error) {
+          callback(500, { message: "Error inserting new user" });
+        } else {
+          console.log();
+          callback(201, {
+            message: "New user inserted with ID:" + results.insertId,
+          });
+        }
+      });
     }
-    const query = `INSERT INTO users (email, password) VALUES (?, ?)`;
-    db.query(query, [email, password], (error, results) => {
-      if (error) {
-        console.log("Error inserting new user:", error);
-        return;
-      }
-      console.log("New user inserted with ID:", results.insertId);
-      return;
-    });
   } catch (error) {
     console.log("Error validating duplicate entry:", error);
-    return;
+    callback(500, { message: "Internal server error" });
   }
 };
 
 module.exports = {
-  create,
-  getUserByEmail,
   validateDuplicateEntry,
   insertNewUser,
 };
