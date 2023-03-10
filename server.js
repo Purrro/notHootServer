@@ -5,15 +5,12 @@ app.use(cors());
 app.use(express.json());
 const dotenv = require("dotenv").config();
 
-const passport = require('passport');
-const passportJWT = require('passport-jwt');
-const JWTStrategy = passportJWT.Strategy;
-const ExtractJWT = passportJWT.ExtractJwt;
-const jwt = require('jsonwebtoken');
-
-
 const router = require("./routes/index");
 app.use("/", router);
+
+const userRouter = require("./auth/index")
+app.use("/users", userRouter);
+
 
 app.listen(3001, () => {
   console.log("Server connected on port 3001");
